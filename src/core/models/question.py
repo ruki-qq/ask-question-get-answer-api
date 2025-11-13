@@ -1,6 +1,7 @@
 from sqlalchemy.orm import relationship
 
-from core import Base, DBTextDateMixin
+from .base import Base
+from ..mixins import DBTextDateMixin
 
 
 class Question(DBTextDateMixin, Base):
