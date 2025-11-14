@@ -11,5 +11,6 @@ class Answer(DBTextDateMixin, Base):
     question_id: Mapped[int] = mapped_column(
         ForeignKey("questions.id", ondelete="CASCADE")
     )
+    user_id: Mapped[str] = mapped_column()
 
-    question = relationship("Question", back_populates="answer", lazy="selectin")
+    question = relationship("Question", back_populates="answer", lazy="joined")

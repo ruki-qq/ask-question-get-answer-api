@@ -2,20 +2,25 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
+from .answer import AnswerResponse
+
 
 class QuestionBase(BaseModel):
     text: str
-    created_at: datetime
-    user_id: int
 
 
-class AnswerCreate(QuestionBase):
+class QuestionCreate(QuestionBase):
     pass
 
 
-class AnswerUpdate(QuestionBase):
-    pass
-
-
-class Answer(QuestionBase):
+class QuestionResponse(QuestionBase):
     id: int
+    user_id: str
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class QuestionDetail(QuestionResponse):
+    answers: list[AnswerResponse] = []

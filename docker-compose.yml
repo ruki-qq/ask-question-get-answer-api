@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: askquestion
+      POSTGRES_USER: questionuser
+      POSTGRES_PASSWORD: secretpass
+    ports:
+      - 5432:5432
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    command: ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=questionuser
+      - DB_PASSWORD=secretpass
+      - DB_NAME=askquestion
+      - DB_URL=postgresql+asyncpg://questionuser:secretpass@db:5432/askquestion
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    volumes:
+      - ./src:/app/src
+
+volumes:
+  pgdata:
