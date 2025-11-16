@@ -9,6 +9,9 @@ COPY ./src ./src
 
 ENV PYTHONPATH=/app/src
 
-RUN chmod +x /entrypoint.sh
+COPY alembic ./alembic
+COPY alembic.ini .
+COPY entrypoint.sh .
 
-CMD /entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+CMD ./entrypoint.sh
