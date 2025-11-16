@@ -1,47 +1,106 @@
 # ask-question-get-answer-api
 
-## Запуск тестов
+This is an API for QA service.
+It's currently supports listing, posting, getting and deleting questions and same for answers.
+Also it has a simple users system to post answers to questions.
 
-Для запуска тестов необходимо установить dev зависимости:
+## Usage
 
+### Clone repo
 ```bash
-pip install -e ".[dev]"
+git clone https://github.com/ruki-qq/ask-question-get-answer-api.git
+cd ask-question-get-answer-api
 ```
 
-Или если используется poetry:
-
+### Running locally
 ```bash
-poetry install --with dev
+poetry install
+cd src
+python main.py
 ```
 
-Затем запустить тесты:
-
+### Running via Docker-compose
 ```bash
-pytest
+docker-compose up
+# you'll get db(PostgreSQL 16) + app containers
+# all dependencies will install via pip from requirements.txt
+# alembic migrations will apply automatically
 ```
 
-Для запуска с покрытием кода:
+## Testing
 
 ```bash
-pytest --cov=src --cov-report=html
+python -m pytest -vvv
+python -m pytest --cov src # check tests coverage
 ```
 
-### Тесты покрывают:
+## Available endpoints examples
 
-- **Questions API:**
-  - GET /api/questions/ - список всех вопросов
-  - POST /api/questions/ - создание вопроса
-  - GET /api/questions/{id} - получение вопроса с ответами
-  - DELETE /api/questions/{id} - удаление вопроса (с каскадным удалением ответов)
-  - POST /api/questions/{id}/answers/ - создание ответа (требует аутентификации)
+### Request
 
-- **Answers API:**
-  - GET /api/answers/{id} - получение ответа
-  - DELETE /api/answers/{id} - удаление ответа (требует аутентификации, только свои ответы)
+GET /api/questions/
 
-- **Логика:**
-  - Каскадное удаление ответов при удалении вопроса
-  - Аутентификация для создания и удаления ответов
-  - Авторизация (пользователи могут удалять только свои ответы)
-  - Валидация данных
-  - Обработка ошибок (404, 401, 403, 422)
+    curl -iH 'GET' \
+    'http://localhost:8000/api/questions/' \
+    -H 'accept: application/json'
+
+### Response
+
+    HTTP/1.1 200 OK
+    date: Sun, 16 Nov 2025 21:33:51 GMT
+    server: uvicorn
+    content-length: 353
+    content-type: application/json
+
+    [
+        {
+            "text":"What is FastAPI?",
+            "id":1,
+            "created_at":"2025-11-16T12:51:27.536294Z"
+        },
+        {
+            "text":"sosi gui",
+            "id":3,
+            "created_at":"2025-11-16T12:51:45.565318Z"
+        }
+    ]
+
+### Request
+
+GET /api/questions/{question_id}
+
+    curl -iH 'GET' \
+    'http://localhost:8000/api/questions/1' \
+    -H 'accept: application/json'
+
+### Response
+
+    HTTP/1.1 200 OK
+    date: Sun, 16 Nov 2025 21:39:37 GMT
+    server: uvicorn
+    content-length: 756
+    content-type: application/json
+
+    {
+        "text":"What is FastAPI?",
+        "id":1,
+        "created_at":"2025-11-16T12:51:27.536294Z",
+        "answers":[
+            {
+                "text":"FastAPI is asynchronous web framework",
+                "id":9,
+                "question_id":1,
+                "user_id":"1f92cea0-9152-486d-aa29-e977c6c5c8cd",
+                "created_at":"2025-11-16T12:54:01.521235Z"
+            },
+            {
+                "text":"I don't know",
+                "id":10,
+                "question_id":1,
+                "user_id":"cacb25a0-9152-454d-aa29-e977c674b8db",
+                "created_at":"2025-11-16T12:54:03.512239Z"
+            }
+        ]
+    }  
+
+Look other endpoints at **/docs**
