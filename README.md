@@ -2,7 +2,7 @@
 
 This is an API for QA service.
 It's currently supports listing, posting, getting and deleting questions and same for answers.
-Also it has a simple users system to post answers to questions.
+Also it has logging, tests and a simple users system to post answers to questions.
 
 ## Usage
 
@@ -26,6 +26,8 @@ docker-compose up
 # all dependencies will install via pip from requirements.txt
 # alembic migrations will apply automatically
 ```
+
+After running you'll be able to create questions, users and answers(first log-in with created user)
 
 ## Testing
 
