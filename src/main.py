@@ -1,5 +1,10 @@
 import uvicorn
 
+from core import get_logger, setup_logging
+
+setup_logging()
+logger = get_logger(__name__)
+
 
 def main() -> None:
     uvicorn.run(
@@ -11,4 +16,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    logger.info("Starting main")
     main()
