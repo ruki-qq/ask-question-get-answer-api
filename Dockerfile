@@ -9,4 +9,6 @@ COPY ./src ./src
 
 ENV PYTHONPATH=/app/src
 
-CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000"]
+RUN chmod +x /entrypoint.sh
+
+CMD /entrypoint.sh

@@ -1,11 +1,10 @@
-version: "3.8"
 services:
   db:
-    image: postgres:15
+    image: postgres:18.1
     environment:
-      POSTGRES_DB: askquestion
-      POSTGRES_USER: questionuser
-      POSTGRES_PASSWORD: secretpass
+      POSTGRES_DB: qa
+      POSTGRES_USER: qa_user
+      POSTGRES_PASSWORD: qa_password
     ports:
       - 5432:5432
     restart: always
@@ -18,10 +17,10 @@ services:
     environment:
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_USER=questionuser
-      - DB_PASSWORD=secretpass
-      - DB_NAME=askquestion
-      - DB_URL=postgresql+asyncpg://questionuser:secretpass@db:5432/askquestion
+      - DB_USER=qa_user
+      - DB_PASSWORD=qa_password
+      - DB_NAME=qa
+      - DB_URL=postgresql+asyncpg://qa_user:qa_password@db:5432/qa
     depends_on:
       - db
     ports:
