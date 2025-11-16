@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated, TYPE_CHECKING
 
 from fastapi import Depends
 
@@ -13,6 +13,6 @@ async def get_users_db(
     session: Annotated[
         "AsyncSession",
         Depends(db_helper.session_dependency),
-    ]
+    ],
 ):
     yield User.get_db(session=session)

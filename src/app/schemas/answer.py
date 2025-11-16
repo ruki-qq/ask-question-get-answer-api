@@ -1,11 +1,11 @@
 from datetime import datetime
+from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class AnswerBase(BaseModel):
-    text: str
-    user_id: str
+    text: str = Field(..., min_length=1)
 
 
 class AnswerCreate(AnswerBase):
@@ -15,7 +15,5 @@ class AnswerCreate(AnswerBase):
 class AnswerResponse(AnswerBase):
     id: int
     question_id: int
+    user_id: UUID
     created_at: datetime
-
-    class Config:
-        orm_mode = True

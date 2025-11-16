@@ -1,12 +1,12 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from .answer import AnswerResponse
+from app.schemas import AnswerResponse
 
 
 class QuestionBase(BaseModel):
-    text: str
+    text: str = Field(..., min_length=1)
 
 
 class QuestionCreate(QuestionBase):
@@ -15,11 +15,7 @@ class QuestionCreate(QuestionBase):
 
 class QuestionResponse(QuestionBase):
     id: int
-    user_id: str
     created_at: datetime
-
-    class Config:
-        orm_mode = True
 
 
 class QuestionDetail(QuestionResponse):

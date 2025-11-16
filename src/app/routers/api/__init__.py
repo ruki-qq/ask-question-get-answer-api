@@ -1,3 +1,5 @@
+__all__ = ("router",)
+
 from fastapi import APIRouter
 
 from .answer import router as answer_router

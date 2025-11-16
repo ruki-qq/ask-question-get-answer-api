@@ -1,8 +1,14 @@
+from typing import TYPE_CHECKING
+from uuid import UUID
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from core.mixins import DBTextDateMixin
 from .base import Base
-from ..mixins import DBTextDateMixin
+
+if TYPE_CHECKING:
+    from .question import Question
 
 
 class Answer(DBTextDateMixin, Base):
@@ -11,6 +17,8 @@ class Answer(DBTextDateMixin, Base):
     question_id: Mapped[int] = mapped_column(
         ForeignKey("questions.id", ondelete="CASCADE")
     )
-    user_id: Mapped[str] = mapped_column()
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
 
-    question = relationship("Question", back_populates="answer", lazy="joined")
+    question: Mapped["Question"] = relationship(
+        "Question", back_populates="answers", lazy="joined"
+    )

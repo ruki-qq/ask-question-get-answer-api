@@ -1,18 +1,17 @@
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from typing import TYPE_CHECKING
 
+from sqlalchemy.orm import Mapped, relationship
+
+from core.mixins import DBTextDateMixin
 from .base import Base
-from ..mixins import DBTextDateMixin
+
+if TYPE_CHECKING:
+    from .answer import Answer
 
 
 class Question(DBTextDateMixin, Base):
     """Model representing a question"""
 
-    user_id: Mapped[str] = mapped_column()
-
-    answer = relationship(
-        "Answer",
-        back_populates="question",
-        cascade="all, delete",
-        passive_deletes=True,
-        lazy="selectin",
+    answers: Mapped[list["Answer"]] = relationship(
+        "Answer", back_populates="question", lazy="selectin"
     )

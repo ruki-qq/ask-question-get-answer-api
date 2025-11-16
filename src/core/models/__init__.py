@@ -1,4 +1,4 @@
-__all__ = ["Answer", "Base", "Question"]
+__all__ = ("Answer", "Base", "Question")
 
 from .answer import Answer
 from .base import Base
