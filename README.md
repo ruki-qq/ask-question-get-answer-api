@@ -51,21 +51,28 @@ GET /api/questions/
     HTTP/1.1 200 OK
     date: Sun, 16 Nov 2025 21:33:51 GMT
     server: uvicorn
-    content-length: 353
+    content-length: len
     content-type: application/json
 
-    [
-        {
-            "text":"What is FastAPI?",
-            "id":1,
-            "created_at":"2025-11-16T12:51:27.536294Z"
-        },
-        {
-            "text":"sosi gui",
-            "id":3,
-            "created_at":"2025-11-16T12:51:45.565318Z"
-        }
-    ]
+    {
+        "items":
+            [
+                {
+                    "text":"What is FastAPI?",
+                    "id":1,
+                    "created_at":"2025-11-16T12:51:27.536294Z"
+                },
+                {
+                    "text":"strwwing",
+                    "id":3,
+                    "created_at":"2025-11-17T08:14:28.154419Z"
+                }
+            ],
+        "total":2,
+        "page":1,
+        "size":50,
+        "pages":1
+    }
 
 ### Request
 
@@ -80,7 +87,7 @@ GET /api/questions/{question_id}
     HTTP/1.1 200 OK
     date: Sun, 16 Nov 2025 21:39:37 GMT
     server: uvicorn
-    content-length: 756
+    content-length: len
     content-type: application/json
 
     {

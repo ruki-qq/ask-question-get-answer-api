@@ -2,6 +2,7 @@ import asyncio
 from typing import AsyncGenerator, Generator
 
 import pytest
+from fastapi_pagination import add_pagination
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -80,7 +81,7 @@ async def client(
     """Test client with overridden database session"""
 
     override_db_session(test_session)
-
+    add_pagination(app)
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as async_client:
         yield async_client

@@ -1,4 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi_pagination import Page
+from fastapi_pagination.async_paginator import apaginate
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas import (
@@ -16,13 +19,13 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/questions", tags=["questions"])
 
 
-@router.get("/", response_model=list[QuestionResponse])
+@router.get("/", response_model=Page[QuestionResponse])
 async def list_questions(session: AsyncSession = Depends(db_helper.get_scoped_session)):
     logger.info("Getting list of all questions")
     logger.debug(
         f"Running QuestionService.list_questions method with session = {session}"
     )
-    return await QuestionService.list_questions(session)
+    return await apaginate(await QuestionService.list_questions(session))
 
 
 @router.get("/{question_id}", response_model=QuestionDetail)

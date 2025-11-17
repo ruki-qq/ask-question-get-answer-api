@@ -12,7 +12,17 @@ class TestListQuestions:
 
         response = await client.get("/api/questions/")
         assert response.status_code == 200
-        assert response.json() == []
+        data = response.json()
+        assert "items" in data
+        assert "total" in data
+        assert "page" in data
+        assert "size" in data
+        assert "pages" in data
+        assert data["items"] == []
+        assert data["total"] == 0
+        assert data["page"] == 1
+        assert data["size"] == 50
+        assert data["pages"] == 0
 
     async def test_list_questions_with_data(
         self, client: AsyncClient, test_question: Question, test_question2: Question
@@ -22,12 +32,41 @@ class TestListQuestions:
         response = await client.get("/api/questions/")
         assert response.status_code == 200
         data = response.json()
-        assert len(data) == 2
-        assert all("id" in item for item in data)
-        assert all("text" in item for item in data)
-        assert all("created_at" in item for item in data)
-        assert any(item["text"] == test_question.text for item in data)
-        assert any(item["text"] == test_question2.text for item in data)
+        questions = data["items"]
+        assert len(questions) == 2
+        assert data["total"] == 2
+        assert data["pages"] == 1
+        assert all("id" in item for item in questions)
+        assert all("text" in item for item in questions)
+        assert all("created_at" in item for item in questions)
+        assert any(item["text"] == test_question.text for item in questions)
+        assert any(item["text"] == test_question2.text for item in questions)
+
+    async def test_list_questions_pagination(self, client: AsyncClient):
+        """Test listing questions paginated"""
+
+        text = "What is pagination?"
+        question_data = {"text": text}
+        for i in range(51):
+            await client.post("/api/questions/", json=question_data)
+
+        response = await client.get("/api/questions/")
+        assert response.status_code == 200
+        data = response.json()
+        questions = data["items"]
+        assert len(questions) == 50
+        assert data["total"] == 51
+        assert data["page"] == 1
+        assert data["size"] == 50
+        assert data["pages"] == 2
+        response = await client.get("/api/questions/?page=2")
+        data = response.json()
+        questions = data["items"]
+        assert len(questions) == 1
+        assert data["total"] == 51
+        assert data["page"] == 2
+        assert data["size"] == 50
+        assert data["pages"] == 2
 
 
 class TestCreateQuestion:
