@@ -5,7 +5,7 @@ class DBSettings(BaseSettings):
     DB_USER: str = "postgres"
     DB_PASSWORD: str = "postgres"
     DB_NAME: str = "qa_dev"
-    DB_HOST: str = "172.27.32.1"
+    DB_HOST: str = "127.0.0.1"
     DB_PORT: int = 5432
     api_prefix: str = "/api/v1"
 
